@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,9 @@ Route::get('/', function () {
     return  view('welcome');
 });
 
-Route::get('/customer_list' , function () {
-    return '<h4>List of Customers</h4>';
-});
+// Route::get('/customer_list' , function () {
+    // return '<h4>List of Customers</h4>';
+// });
 
 Auth::routes();
 
@@ -34,3 +35,11 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('/customer-list' , [CustomerController::class, 'index'])->name('customer.list'); 
+    // return 'list of customers.';
+
+
+
+
+

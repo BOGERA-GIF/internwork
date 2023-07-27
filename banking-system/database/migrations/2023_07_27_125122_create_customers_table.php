@@ -13,7 +13,18 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('business_name', 255)->default('');
+            $table->string('account_number', 255)->default('')->unique();
+            $table->string('contact_person_name', 255)->default('');
+            $table->string('contact_person_phone', 255)->default('');
+            $table->string('business_phone', 255)->default('');
+            $table->string('business_email', 255)->default('');
+            $table->string('pin', 255)->default('');
+            $table->double('available_balance')->default(0);
+            $table->double('actual_balance')->default(0);
+            $table->dateTime('created_on')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_on')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->string('created_by', 255)->default('');
         });
     }
 
