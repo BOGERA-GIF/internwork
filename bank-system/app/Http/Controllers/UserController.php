@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         // Retrieve all users from the database
         $users = User::all();
-
+        // $this->authorize('isAdmin');
         // Pass the users to the 'users.index' view
         return view('users.index', compact('users'));
     }

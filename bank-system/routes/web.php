@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\CustomerDashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +21,20 @@ use App\Http\Controllers\HomeController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::middleware(['role:admin'])->group(function () {
+    // Admin dashboard route
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
+});
+
+Route::middleware(['role:customer'])->group(function () {
+    // Customer dashboard route
+    Route::get('/customer/dashboard', [CustomerDashboardController::class, 'index']);
+});
+
+// Show login form
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+// Handle login
+Route::post('/login', [LoginController::class, 'login']);
 
 // routes/web.php
 
