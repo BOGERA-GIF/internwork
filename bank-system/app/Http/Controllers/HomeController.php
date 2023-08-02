@@ -3,12 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function redirect()
     {
-        // You can customize the data to be passed to the view if needed
-        return view('home');
+        if(Auth::id())
+        {
+            if(Auth::user()-usertype=='admin')
+            {
+                return view('dashboard');
+            }
+
+            else
+            {
+                return view('admin.home');
+            }
+        }
+
+        else
+        {
+            return redirect()->back();
+        } 
+        
+        
     }
 }

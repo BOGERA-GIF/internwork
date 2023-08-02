@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\CustomerDashboardController;
+use App\Http\Controllers\CustomerDepositController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +22,14 @@ use App\Http\Controllers\CustomerDashboardController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/insert-customer', [CustomerController::class, 'showInsertForm'])->name('insert-customer');
+Route::post('/insert-customer', [CustomerController::class, 'insertData']);
+
+Route::get('/insert-user', [UserController::class, 'showInsertForm'])->name('insert-user');
+Route::post('/insert-user', [UserController::class, 'insertData']);
+
+
 Route::middleware(['role:admin'])->group(function () {
     // Admin dashboard route
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
@@ -51,8 +60,16 @@ Route::post('/login', [LoginController::class, 'login']);
 // use App\Http\Controllers\Auth\LoginController;
 
 // Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+Route::middleware(['role:customer'])->group(function () {
+    // Other customer routes...
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/customer/deposit', [CustomerDepositController::class, 'showDepositForm']);
+    Route::post('/customer/deposit', [CustomerDepositController::class, 'depositFunds']);
+});
+
+
+
+Route::get('/home', [HomeController::class, 'redirect'])->name('home');
 
 // Routes for User Management
 Route::prefix('users')->group(function () {

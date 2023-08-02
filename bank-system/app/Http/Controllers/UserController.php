@@ -24,6 +24,31 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
+    public function showInsertForm()
+    {
+        return view('users.create_user');
+    }
+
+
+    public function insertData(Request $request)
+    {
+        $data = [
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'phone' => $request->input('phone'),
+            'email' => $request->input('email'),
+            'designation' => $request->input('designation'),
+            'password' => bcrypt($request->input('password')), // Encrypt password
+            'business_email' => $request->input('business_email'),
+            'business_email' => $request->input('business_email'),
+        ];
+
+        User::create($data);
+
+        return redirect()->back()->with('success', 'User data inserted successfully.');
+    }
+
+    
     /**
      * Show the form for creating a new user.
      *

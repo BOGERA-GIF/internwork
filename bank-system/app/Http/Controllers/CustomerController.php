@@ -25,6 +25,32 @@ class CustomerController extends Controller
         return view('customers.index', compact('customers'));
     }
 
+    public function showInsertForm()
+    {
+        return view('customer.create_customer');
+    }
+
+
+    public function insertData(Request $request)
+    {
+        $data = [
+            'business_name' => $request->input('business_name'),
+            'account_number' => $request->input('account_number'),
+            'contact_person_name' => $request->input('contact_person_name'),
+            'contact_person_phone' => $request->input('contact_person_phone'),
+            'business_phone' => $request->input('business_phone'),
+            'business_email' => $request->input('business_email'),
+            'pin' => $request->input('pin'),
+            'available_balance'=>$request->input('available_balance'),
+            'actual_balance'=>$request->input('actual_balance'),
+            // ... other customer attributes
+        ];
+
+        Customer::create($data);
+
+        return redirect()->back()->with('success', 'Customer data inserted successfully.');
+    }
+
     /**
      * Show the form for creating a new customer.
      *

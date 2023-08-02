@@ -11,6 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    protected $fillable = ['first_name', 'email', 'phone', 'password']; // use HasApiTokens, HasFactory, Notifiable;
+    protected $fillable = ['first_name', 'last_name', 'email', 'password' ,  'phone' , 'designation', 'business_email']; // use HasApiTokens, HasFactory, Notifiable;
 
 };
