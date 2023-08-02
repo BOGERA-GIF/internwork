@@ -8,7 +8,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>account_number</th>
                     <th>Email</th>
                     <th>Actions</th>
                 </tr>
@@ -16,7 +16,7 @@
             <tbody>
                 @foreach($customers as $customer)
                     <tr>
-                        <td>{{ $customer->name }}</td>
+                        <td>{{ $customer->account_number }}</td>
                         <td>{{ $customer->email }}</td>
                         <td>
                             <a href="{{ route('customers.edit', $customer->id) }}">Edit</a>

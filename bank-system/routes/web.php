@@ -22,6 +22,7 @@ use App\Http\Controllers\CustomerDepositController;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/customers/create', 'CustomerController@create')->name('customers.create');
 
 Route::get('/insert-customer', [CustomerController::class, 'showInsertForm'])->name('insert-customer');
 Route::post('/insert-customer', [CustomerController::class, 'insertData']);

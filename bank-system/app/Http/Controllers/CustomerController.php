@@ -25,6 +25,18 @@ class CustomerController extends Controller
         return view('customers.index', compact('customers'));
     }
 
+    public function create()
+    {
+        $customer = new Customer();
+        // Create a new instance of the Customer model
+    // You can set default values for the $customer instance if needed
+    // For example: $customer->email = '';
+
+
+        return view('customers.create');
+    }
+
+
     public function showInsertForm()
     {
         return view('customer.create_customer');
@@ -56,11 +68,11 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
-    {
-        // Display the 'customers.create' view (form for creating a new customer)
-        return view('customers.create');
-    }
+    // // public function create()
+    // {
+    //     // Display the 'customers.create' view (form for creating a new customer)
+    //     return view('customers.create');
+    // }
 
     /**
      * Store a newly created customer in the database.
