@@ -11,7 +11,7 @@
         <li><a href="/customer/balance">View Balance</a></li>
         <li><a href="/customer/deposit">Deposit Funds</a></li>
         <li><a href="/customer/withdraw">Withdraw Funds</a></li>
-        <li><a href="/customer/statement">View Account Statement</a></li>
+        <li><a href="/customer/statement">Transactions</a></li>
     </ul>
 </body>
 </html>

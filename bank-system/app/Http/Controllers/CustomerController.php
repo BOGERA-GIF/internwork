@@ -8,6 +8,9 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
 
 class CustomerController extends Controller
 {
@@ -16,6 +19,34 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    public function showLoginForm()
+    {
+    return view('auth.customer-login');
+    }
+
+    public function login(Request $request)
+    {
+    $credentials = [
+        'account_number' => $request->input('account_number'),
+        'pin' => $request->input('pin'),
+    ];
+
+    if (Auth::attempt($credentials)) {
+        // Authentication passed...
+        return redirect()->route('customers.index')->with('success', 'Logged in successfully.');
+    } else {
+
+    // Authentication failed...
+    return back()->withInput()->withErrors(['login' => 'Invalid account number or PIN.']);
+    }
+    }
+
+
+
+
+
+
+
     public function index()
     {
         // Retrieve all customers from the database

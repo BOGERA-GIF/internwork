@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    public function findForPassport($username) {
+        return $this->where('account_number', $username)->first();
+    }
+    
+    protected $table = 'customers';
     protected $fillable = [
         'business_name',
         'account_number',

@@ -7,9 +7,47 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
-{
+{ 
+
+
+    public function showLoginForm()
+    {
+        return view('users.login');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('users')->attempt($credentials)) {
+            return redirect()->route('users.dashboard');
+        }
+        // if (auth()->attempt($credentials)) {
+            // return redirect()->route('users.dashboard');
+        // }
+        
+
+        return back()->withErrors(['email' => 'Invalid credentials']);
+    }
+
+    public function showRegistrationForm()
+    {
+        return view('users.register');
+    }
+
+    public function register(Request $request)
+    {
+        // Validation and user creation logic here
+        // After creating the user, you can log them in and redirect to dashboard
+    }
+
+    public function dashboard()
+    {
+        return view('users.dashboard');
+    }
     /**
      * Display a listing of the users.
      *

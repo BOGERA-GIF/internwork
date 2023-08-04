@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\CustomerDepositController;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,20 +32,24 @@ Route::get('/insert-user', [UserController::class, 'showInsertForm'])->name('ins
 Route::post('/insert-user', [UserController::class, 'insertData']);
 
 
-Route::middleware(['role:admin'])->group(function () {
-    // Admin dashboard route
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
-});
+// Route::middleware(['role:admin'])->group(function () {
+//     // Admin dashboard route
+//     Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard']);
+// });
 
-Route::middleware(['role:customer'])->group(function () {
-    // Customer dashboard route
-    Route::get('/customer/dashboard', [CustomerDashboardController::class, 'index']);
-});
+// Route::middleware(['role:customer'])->group(function () {
+//     // Customer dashboard route
+//     Route::get('/customer/dashboard', [CustomerDashboardController::class, 'index']);
+// });
+
+
+Route::get('/customer/login', [CustomerController::class, 'showLoginForm'])->name('customer.login');
+Route::post('/customer/login', [CustomerController::class, 'login']);
 
 // Show login form
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+// Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 // Handle login
-Route::post('/login', [LoginController::class, 'login']);
+// Route::post('/login', [LoginController::class, 'login']);
 
 // routes/web.php
 
@@ -61,12 +66,22 @@ Route::post('/login', [LoginController::class, 'login']);
 // use App\Http\Controllers\Auth\LoginController;
 
 // Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
-Route::middleware(['role:customer'])->group(function () {
-    // Other customer routes...
+// Route::middleware(['role:customer'])->group(function () {
+//     // Other customer routes...
 
-    Route::get('/customer/deposit', [CustomerDepositController::class, 'showDepositForm']);
-    Route::post('/customer/deposit', [CustomerDepositController::class, 'depositFunds']);
+//     Route::get('/customer/deposit', [CustomerDepositController::class, 'showDepositForm']);
+//     Route::post('/customer/deposit', [CustomerDepositController::class, 'depositFunds']);
+// });
+
+Route::get('/user/login', [UserController::class, 'showLoginForm'])->name('users.login');
+Route::post('/user/login', [UserController::class, 'login'])->name('users.login.submit');
+Route::get('/user/register', [UserController::class, 'showRegistrationForm'])->name('users.register');
+Route::post('/user/register', [UserController::class, 'register'])->name('users.register.submit');
+Route::middleware(['auth:users'])->group(function () {
+Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('users.dashboard');
+    // Add other user-specific routes here
 });
+
 
 
 
