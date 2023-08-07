@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\CustomerDepositController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\AuthenticatesCustomers;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,7 +24,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/customers/create', 'CustomerController@create')->name('customers.create');
+// Route::get('/customers/create', 'CustomerController@create')->name('customers.create');
 
 Route::get('/insert-customer', [CustomerController::class, 'showInsertForm'])->name('insert-customer');
 Route::post('/insert-customer', [CustomerController::class, 'insertData']);
@@ -43,8 +44,8 @@ Route::post('/insert-user', [UserController::class, 'insertData']);
 // });
 
 
-Route::get('/customer/login', [CustomerController::class, 'showLoginForm'])->name('customer.login');
-Route::post('/customer/login', [CustomerController::class, 'login']);
+// Route::get('/customer/login', [CustomerController::class, 'showLoginForm'])->name('customer.login');
+// Route::post('/customer/login', [CustomerController::class, 'login']);
 
 // Show login form
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -81,6 +82,17 @@ Route::middleware(['auth:users'])->group(function () {
 Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('users.dashboard');
     // Add other user-specific routes here
 });
+
+// Customer Login
+Route::get('customer/login', [CustomerController::class, 'showLoginForm'])->name('customers.login');
+Route::post('customer/login',  [CustomerController::class, 'login'])->name('customers.login.submit');
+Route::get('customer/register',  [CustomerController::class, 'showRegistrationForm'])->name('customers.register');
+Route::post('customer/register',  [CustomerController::class, 'register'])->name('customers.register.submit');
+Route::middleware(['auth:customers'])->group(function () {
+Route::get('customer/dashboard',  [CustomerController::class, 'dashboard'])->name('customers.dashboard');
+});
+Route::post('/customer/logout',  [CustomerController::class, 'logout'])->name('customers.logout');
+
 
 
 

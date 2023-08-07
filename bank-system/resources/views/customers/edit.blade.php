@@ -1,6 +1,6 @@
-@extends('layouts.app')
+<!-- @extends('layouts.app') -->
 
-@section('content')
+<!-- @section('content') -->
     <h1>Edit Customer</h1>
     <form action="{{ route('customers.update', $customer->id) }}" method="POST">
         @csrf
@@ -16,4 +16,4 @@
         
         <button type="submit">Save Changes</button>
     </form>
-@endsection
+<!-- @endsection -->

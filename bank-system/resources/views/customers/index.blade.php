@@ -1,6 +1,6 @@
-@extends('layouts.app')
+<!-- @extends('layouts.app') -->
 
-@section('content')
+<!-- @section('content') -->
     <h1>Customer Management</h1>
     <a href="{{ route('customers.create') }}">Add New Customer</a>
 
@@ -33,4 +33,4 @@
     @else
         <p>No customers found.</p>
     @endif
-@endsection
+<!-- @endsection -->

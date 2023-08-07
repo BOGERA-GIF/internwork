@@ -1,6 +1,6 @@
-@extends('layouts.app')
+<!-- @extends('layouts.app') -->
 
-@section('content')
+<!-- @section('content') -->
     <h1>Create New Customer</h1>
     <form action="{{ route('customers.store') }}" method="POST">
         @csrf
@@ -15,6 +15,6 @@
         
         <button type="submit">Create Customer</button>
     </form>
-@endsection
+<!-- @endsection -->
 
 

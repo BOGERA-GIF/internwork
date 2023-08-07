@@ -34,7 +34,7 @@
             padding: 8px;
             text-decoration: none;
             margin: 0px;
-            border: 1px solid #eeeeee;
+            border: 1px solid #222ECE;
         }
     </style>
 </head>
@@ -47,7 +47,7 @@
                     <li><a href="{{ route('home') }}">Home</a></li>
                     <li><a href="{{ route('users.index') }}">Users</a></li>
                     <li><a href="{{ route('customers.index') }}">Customers</a></li>
-                    <li><a href="{{ route('customer.login') }}">Customer Login</a></li>
+                    <li><a href="{{ route('customers.login') }}">Customer Login</a></li>
                 </ul>
             </nav>
         </div>
