@@ -15,10 +15,38 @@
                 <p>Contact Person: {{ $customer->contact_person_name }}</p>
                 <!-- Display other customer information here --> 
 
-                <div class="mt-4"> 
+                <!-- <div class="mt-4"> 
                      <a href="{{ route('customers.logout') }}"
                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Logout
+                        
+                    </a>
+                    <form action="{{ route('customers.logout') }}" method="POST">
+    @csrf
+    <button type="submit">Logout</button>
+</form>
+
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div> 
+
+    <h1>Welcome, Customer!</h1>
+    
+    <h2>Functionalities:</h2>
+    <ul>
+        <li><a href="/customer/view_balance">View Balance</a></li>
+        <li><a href="/customer/deposit">Deposit Funds</a></li>
+        <li><a href="/customer/withdraw">Withdraw Funds</a></li>
+        <li><a href="{{ route('customers.account_statement') }}">View Account Statement</a></li>
+    </ul>
+</body>
+</html> 
+
+<div class="mt-4"> 
+                     <a href="{{ route('customers.logout') }}"
+                       class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        
                     </a>
                     <form action="{{ route('customers.logout') }}" method="POST">
     @csrf
@@ -26,39 +54,5 @@
 </form>
 
                 </div>
-            </div>
-        </div>
-    </div>
-</div> 
 
-    <!-- <h1>Welcome, Customer!</h1>
-    
-    <h2>Customer Functionalities:</h2>
-    <ul>
-        <li><a href="/customer/balance">View Balance</a></li>
-        <li><a href="/customer/deposit">Deposit Funds</a></li>
-        <li><a href="/customer/withdraw">Withdraw Funds</a></li>
-        <li><a href="/customer/statement">Transactions</a></li>
-    </ul>
-</body>
-</html> -->
-
- <!-- <div class="flex justify-center">
-    <div class="w-full max-w-3xl">
-        <div class="p-6">
-            <h2 class="text-2xl font-semibold mb-4">Admin Dashboard</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <a href="{{ route('users.index') }}"
-                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded shadow-md transition duration-300">
-                    Manage Users
-                </a> 
-
-                 <a href="{{ route('customers.index') }}"
-                   class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-6 rounded shadow-md transition duration-300">
-                    Manage Customers
-                </a>
-            </div>
-        </div> 
-     </div>
-</div> -->
+ 

@@ -10,6 +10,8 @@ use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\CustomerDepositController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\AuthenticatesCustomers;
+use App\Http\Controllers\DepositController;
+// use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -117,4 +119,31 @@ Route::prefix('customers')->group(function () {
     Route::get('/{id}/edit', [CustomerController::class, 'edit'])->name('customers.edit');
     Route::put('/{id}/update', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/{id}/delete', [CustomerController::class, 'destroy'])->name('customers.destroy');
+});
+
+
+// customers balance
+Route::middleware(['auth:customers'])->group(function () {
+    Route::get('/customer/view_balance', [CustomerController::class, 'viewBalance'])
+        ->name('customers.view_balance');
+});
+// Route::get('customer/view_balance', [CustomerController::class, 'viewBalance'])->name('customers.view_balance');
+// });
+// Route::post('/customer/balance', [CustomerController::class, 'viewBalance'])->name('customers.view_balance');
+//customer's deposit
+Route::get('/customer/deposit', [CustomerController::class, 'showDepositForm'])->name('customers.show_depositForm');
+Route::post('/customer/deposit', [CustomerController::class, 'processDeposit'])->name('customers.process_deposit');
+
+// withdrawing from the bank_account to the mobile money account
+Route::get('/customer/withdraw', [CustomerController::class, 'showWithdrawForm'])->name('customers.show_withdraw_form');
+Route::post('/customer/withdraw', [CustomerController::class, 'processWithdraw'])->name('customers.process_withdraw');
+
+//showing the customer_transactions
+// Route::get('/customer/account-statement', [CustomerController::class, 'showAccountStatement'])->name('customers.account_statement');
+// Auth::routes();
+
+Route::middleware(['auth:customers'])->group(function () {
+    Route::get('/customer/account-statement', [CustomerController::class, 'showAccountStatement'])
+        ->name('customers.account_statement');
+    // Add other authenticated routes here
 });

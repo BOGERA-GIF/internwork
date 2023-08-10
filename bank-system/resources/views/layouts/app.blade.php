@@ -9,6 +9,7 @@
 
     <!-- Add EasyUI CSS -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    
 
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
@@ -34,7 +35,7 @@
             padding: 8px;
             text-decoration: none;
             margin: 0px;
-            border: 1px solid #222ECE;
+            border: 1px solid #EEEEEE;
         }
     </style>
 </head>
@@ -48,6 +49,7 @@
                     <li><a href="{{ route('users.index') }}">Users</a></li>
                     <li><a href="{{ route('customers.index') }}">Customers</a></li>
                     <li><a href="{{ route('customers.login') }}">Customer Login</a></li>
+                    <li><a href="{{ route('customers.view_balance') }}">View Balance</a></li>
                 </ul>
             </nav>
         </div>

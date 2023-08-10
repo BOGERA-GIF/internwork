@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'yopayments' => [
+        'api_username'=> "90000661673",
+        'api_password'=>"2435412916",
+        "mode"=>"sandbox"
+    ]
+
 ];

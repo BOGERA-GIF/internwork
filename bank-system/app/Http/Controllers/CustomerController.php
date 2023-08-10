@@ -4,12 +4,20 @@
 
 namespace App\Http\Controllers;
 
+// use App\controllers\yoPayments\YoAPI.php;
+
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 // use Illuminate\Support\Facades\Session;
+use App\Models\CustomerTransaction;
+use Illuminate\Config\Repository;
+use App\Classes\YoAPI;
+//require_once 'yoPayments\YoAPI.php';
+
 
 
 class CustomerController extends Controller
@@ -94,12 +102,23 @@ public function showRegistrationForm()
 
 // Handle Customer Registration
 public function register(Request $request)
-{
+   {
+    $credentials = $request->validate([
+        'account_number' => 'required',
+        'pin' => 'required',
+    ]);
+    $customer = Customer::where('account_number', $credentials['account_number'])->first();
+    // echo "<pre>";print_r($customer->pin);echo "</pre>";
+
+    if ($customer && (Hash::check($credentials['pin'], $customer->pin))) {
     // Validate and create customer
 
     Auth::guard('customers')->login($customer);
     return view('customers.register', ['customer' => $customer]);
     // return redirect()->route('customer.dashboard');
+    }else {
+    return redirect()->route('customers.dashboard'); 
+   }
 }
 
 
@@ -119,7 +138,13 @@ public function logout(Request $request)
 
     public function dashboard()
     {
-        return view('customers.dashboard');
+        $user = Auth::user();
+
+    // Retrieve the customer based on the user's account_number
+    $customer = Customer::where('account_number', $user->account_number)->first();
+
+    return view('customers.dashboard', ['customer' => $customer]);
+        // return view('customers.dashboard');
     }
 
 
@@ -280,51 +305,206 @@ public function logout(Request $request)
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }
        // Customer Viewing Balance
-    public function viewBalance()
+//     public function showBalance()
+// {  
+//     // Ensure the customer is authenticated
+//     if (!Auth::guard('customers')->check()) {
+//         return redirect()->route('customers.login');
+//     }
+
+//     // Query the customers table for the customer's balances
+//     $customer = Auth::guard('customers')->user();
+//     $actualBalance = $customer->actual_balance;
+//     $availableBalance = $customer->available_balance;
+
+//     // Display the balances in a view
+//     return view('customers.view_balance', compact('actualBalance', 'availableBalance'));
+   
+// }
+
+public function viewBalance()
 {
-    // Ensure the customer is authenticated
-    if (!Auth::guard('customers')->check()) {
-        return redirect()->route('customer.login');
-    }
+    // Get the authenticated user
+    if (Auth::check()) {
+    $user = Auth::user();
 
-    // Query the customers table for the customer's balances
-    $customer = Auth::guard('customers')->user();
-    $actualBalance = $customer->actual_balance;
-    $availableBalance = $customer->available_balance;
+    // Retrieve the customer based on the user's account_number
+    $customer = Customer::where('account_number', $user->account_number)->first();
 
-    // Display the balances in a view
-    return view('customer.view_balance', compact('actualBalance', 'availableBalance'));
+    return view('customers.view_balance', ['customer' => $customer]);
+}else {
+    // Redirect or show an error message for unauthenticated users
+    // For example, redirect to the login page
+    return redirect()->route('customers.dashboard');
+}
 }
 
-public function depositForm()
-{
-    // Ensure the customer is authenticated
-    if (!Auth::guard('customers')->check()) {
-        return redirect()->route('customer.login');
+    
+
+ 
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    //customer deposit
+    public function showDepositForm()
+    {
+        $user = Auth::user();
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            // Now you can access $user->account_number
+            $customer = Customer::where('account_number', $user->account_number)->first();
+
+        } else {
+            // Handle the case when the user is not authenticated
+            // return view('deposit', ['customer' => $customer]);
+            return view('customers.depositForm');
+            // return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
+        }
     }
 
-    return view('customer.deposit_form');
-}
+    // Retrieve the customer based on the user's account_number
+    //$customer = Customer::where('account_number', $user->account_number)->first();
 
-public function processDeposit(Request $request)
-{
-    // Ensure the customer is authenticated
-    if (!Auth::guard('customers')->check()) {
-        return redirect()->route('customer.login');
-    }
+    //return view('deposit', ['customer' => $customer]);
+//}
+    // return view('customers.depositForm');
+    // }
 
-    // Validate the deposit form data
+     public function processDeposit(Request $request)
+     {
+    // Validation
     $request->validate([
-        'amount' => 'required|numeric|min:0.01',
-        'narrative' => 'required|string|max:255',
+        'amount' => 'required|numeric|min:0',
+        'narrative' => 'required',
     ]);
 
-    // Obtain the amount and narrative
-    $amount = $request->input('amount');
-    $narrative = $request->input('narrative');
+    // Process deposit and update balances
+    $customer = Auth::guard('customers')->user();
+    $depositAmount = $request->input('amount');
 
-    // Generate a UUID4 reference
-    $reference = Str::uuid()->toString();
+    $username= config("services.yopayments.api_username");
+    $password= config("services.yopayments.api_password");
+    $mode= config("services.yopayments.mode");
+
+    $mode = "sandbox";//For production, set this to production
+    $yoAPI = new YoAPI($username, $password, $mode);
+    $yoAPI->set_nonblocking("TRUE");
+    $response = $yoAPI->ac_deposit_funds('256770000000', 10000, 'Reason for transfer of funds');
+    if($response['Status']=='OK'){
+
+         dd($response);
+        // Transaction was successful and funds were deposited onto your account
+        echo "Transaction Reference = ".$response['TransactionReference'];
+    }
+}
+    // Update balances and log transaction
+    
+    
+    
+    // Construct Yo! Payments XML
+    
+
+
+
+public function showWithdrawForm()
+{
+    return view('customers.show_withdraw_form');
+}
+
+public function processWithdraw(Request $request)
+{
+    // Validation
+    $request->validate([
+        'amount' => 'required|numeric|min:0',
+    ]);
+
+    // Process withdraw and update balances
+    $customer = Auth::guard('customers')->user();
+    $withdrawAmount = $request->input('amount');
+    // Update balances and log transaction
+
+    // Construct Yo! Payments XML
+    $xml = ""; // Construct the XML structure
+
+    // Make acwithdrawfunds API call to Yo! Payments
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer YOUR_YO_PAYMENTS_API_KEY',
+        'Content-Type' => 'application/xml',
+    ])->post('https://paymentsapi1.yo.co.ug/ybs/task.php', $xml);
+
+    // Parse the results and update transaction
+    // Update status, payment_gateway_reference, etc.
+
+    // Return success message
+    return redirect()->route('customers.view_balance')->with('success', 'Withdrawal successful.');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// public function depositForm()
+// {
+//     // Ensure the customer is authenticated
+//     if (!Auth::guard('customers')->check()) {
+//         return redirect()->route('customer.login');
+//     }
+
+//     return view('customer.deposit_form');
+// }
+
+// public function processDeposit(Request $request)
+// {
+//     // Ensure the customer is authenticated
+//     if (!Auth::guard('customers')->check()) {
+//         return redirect()->route('customer.login');
+//     }
+
+//     // Validate the deposit form data
+//     $request->validate([
+//         'amount' => 'required|numeric|min:0.01',
+//         'narrative' => 'required|string|max:255',
+//     ]);
+
+//     // Obtain the amount and narrative
+//     $amount = $request->input('amount');
+//     $narrative = $request->input('narrative');
+
+//     // Generate a UUID4 reference
+//     $reference = Str::uuid()->toString();
 
     // Create a new entry in the transactions_log table
 
@@ -335,42 +515,67 @@ public function processDeposit(Request $request)
     // Return the display message to the user
 
     // Redirect back or to a success page
-}
+// }
     
 
-public function accountStatementForm()
-{
-    // Ensure the customer is authenticated
-    if (!Auth::guard('customers')->check()) {
-        return redirect()->route('customer.login');
-    }
+// public function accountStatementForm()
+// {
+//     // Ensure the customer is authenticated
+//     if (!Auth::guard('customers')->check()) {
+//         return redirect()->route('customer.login');
+//     }
 
-    return view('customer.account_statement_form');
-}
+//     return view('customers.account_statement_form');
+// }
 
-public function processAccountStatement(Request $request)
-{
-    // Ensure the customer is authenticated
-    if (!Auth::guard('customers')->check()) {
-        return redirect()->route('customer.login');
-    }
+// public function processAccountStatement(Request $request)
+// {
+//     // Ensure the customer is authenticated
+//     if (!Auth::guard('customers')->check()) {
+//         return redirect()->route('customer.login');
+//     }
 
-    // Validate the account statement form data
-    $request->validate([
-        'start_date' => 'required|date',
-        'end_date' => 'required|date|after:start_date',
-    ]);
+//     // Validate the account statement form data
+//     $request->validate([
+//         'start_date' => 'required|date',
+//         'end_date' => 'required|date|after:start_date',
+//     ]);
 
-    // Obtain the start and end dates
-    $startDate = $request->input('start_date');
-    $endDate = $request->input('end_date');
+//     // Obtain the start and end dates
+//     $startDate = $request->input('start_date');
+//     $endDate = $request->input('end_date');
 
     // Query the customer_transactions table for the statement using the provided date range
 
     // Display the statement in a view
 
     // Redirect back or to a success page
+// }
+
+
+// }
+
+
+public function showAccountStatement()
+ {
+    // Get the authenticated user
+    if (Auth::check()) {
+        // User is authenticated
+        $user = Auth::user();
+    // Retrieve the customer based on the user's account_number
+    $customer = Customer::where('account_number', $user->account_number)->first();
+
+    // Retrieve the account statement transactions
+    $transactions = CustomerTransaction::where('customer_id', $customer->id)
+        ->orderBy('created_on', 'desc')
+        ->get();
+
+    return view('customers.account_statement', compact('transactions'));
+ }else {
+    // Redirect or show an error message for unauthenticated users
+    // For example, redirect to the login page
+    return redirect()->route('customers.dashboard');
 }
 
-
+}
 }
