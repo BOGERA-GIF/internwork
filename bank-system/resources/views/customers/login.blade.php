@@ -47,7 +47,9 @@
     </div>
 </div>
  -->
+ @extends('layouts.customer_app')
 
+@section('content')
  <div class="flex justify-center items-center min-h-screen bg-gray-100">
     <div class="w-full max-w-xs">
         <div class="login-form">
@@ -93,6 +95,7 @@
         </div>
     </div>
 </div>
+@endsection
 @if(session('error'))
     {{ session('error') }}
 @endif

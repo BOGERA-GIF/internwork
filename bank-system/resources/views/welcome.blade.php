@@ -1,5 +1,8 @@
 
-<h1><strong> BankHub</strong></h1>
+@extends('layouts.customer_app')
+
+@section('content')
+<h1><strong> Welcome!</strong></h1>
 <div class="flex justify-center">
     <div class="w-full max-w-3xl">
         <div class="p-6">
@@ -33,3 +36,4 @@
         </div> 
      </div>
 </div> 
+@endsection

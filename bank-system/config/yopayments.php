@@ -18,3 +18,8 @@ return [
     'api_password'=>"",
     "mode"=>"sandbox"
 ];
+
+
+return [
+    'private_key_file' => storage_path('app/private_key.pem'), // Adjust the path as needed
+];

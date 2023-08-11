@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini-Core Banking System</title>
     <!-- Include your CSS and JavaScript links here -->
-
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
     <!-- Link to your jQuery and EasyUI CSS files -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-easyui@1.10.1/themes/bootstrap/easyui.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-easyui@1.10.1/themes/icon.css">
@@ -36,7 +36,7 @@
         </div>
     </nav>
 
-    <div class="container mx-auto mt-8">
+    <div class="bg-gray-200 container mx-auto mt-8 p-4 rounded-lg  max-w-4xl">
         @yield('content')
     </div>
 

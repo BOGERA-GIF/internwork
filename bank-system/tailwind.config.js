@@ -7,3 +7,15 @@ export default {
   plugins: [],
 }
 
+// tailwind.config.js
+module.exports = {
+  // ...
+  theme: {
+    extend: {
+      colors: {
+        'mint-cream': '#F5FFFA', // Replace with the actual color code
+      },
+    },
+  },
+  // ...
+};

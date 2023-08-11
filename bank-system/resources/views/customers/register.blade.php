@@ -1,9 +1,11 @@
+@extends('layouts.customer_app')
 
+@section('content')
 <div class="flex justify-center items-center min-h-screen bg-gray-100">
     <div class="w-full max-w-xs">
         <div class="register-form">
             <h2 class="text-2xl text-center font-bold mb-4">Customer Registration</h2>
-            <!-- <form method="POST" action="{{ route('customers.register') }}">
+            <form method="POST" action="{{ route('customers.register') }}">
                 @csrf
 
                 <div class="mb-4">
@@ -17,8 +19,8 @@
                         name="account_number"
                         required
                     >
-                </div> -->
-                <form method="POST" action="{{ route('customers.register') }}">
+                </div>
+                <!-- <form method="POST" action="{{ route('customers.register') }}">
         @csrf
         <label for="business_name">Business Name:</label>
         <input type="text" id="business_name" name="business_name" required>
@@ -48,13 +50,24 @@
         <input type="number" id="actual_balance" name="actual_balance" required>
         
         
-        
-        
+         -->
+         <div class="flex items-center justify-center">
+                    <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        type="submit"
+                    >
+                        Register
+                    </button>
+                </div>
+        @endsection
 
-        <button type="submit">register</button>
-    </form>
-</body>
-</html>
+        <!-- <button type="submit">register</button> -->
+    <!-- </form>
+
+        </div> -->
+    <!-- </div>
+</div> -->
+
 
 
                 <!-- Include other registration fields here -->
@@ -66,9 +79,9 @@
                     >
                         Register
                     </button>
-                </div>
+                 </div>
             </form>
         </div>
     </div>
-</div> -->
+</div>
 

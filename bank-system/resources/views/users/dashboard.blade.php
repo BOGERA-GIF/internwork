@@ -1,4 +1,7 @@
 
+@extends('layouts.customer_app')
+
+@section('content')
 <div class="flex justify-center">
     <div class="w-full max-w-3xl">
         <div class="p-6">
@@ -18,4 +21,4 @@
         </div>
     </div>
 </div>
-
+@endsection

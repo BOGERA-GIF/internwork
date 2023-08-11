@@ -407,6 +407,11 @@ public function viewBalance()
     $mode = "sandbox";//For production, set this to production
     $yoAPI = new YoAPI($username, $password, $mode);
     $yoAPI->set_nonblocking("TRUE");
+
+
+    $transaction_reference = date("YmdHis").rand();
+    $yoAPI->set_external_reference($transaction_reference);
+
     $response = $yoAPI->ac_deposit_funds('256770000000', 10000, 'Reason for transfer of funds');
     if($response['Status']=='OK'){
 
@@ -440,21 +445,61 @@ public function processWithdraw(Request $request)
     $customer = Auth::guard('customers')->user();
     $withdrawAmount = $request->input('amount');
     // Update balances and log transaction
+    // $yoAPI = new YoAPI($username, $password); 
+    // $username = '';
+    // $password = '';
+    $msisdn = '2567.....';
+    $amount = '1000';
+    $narrative = 'ac_withdraw_funds payments test with public key authentication signature';
+    $privateKeyFile = config('yo_payments.private_key_file');
+
+	//Set below variables to your Yo! Payments username and password accordingly
+	$username = config("services.yopayments.api_username");
+	$password = config("services.yopayments.api_password");
+    $mode= config("services.yopayments.mode");
+
+
+	$mode = "sandbox";//In production, set this to "production"
+	$yoAPI = new YoAPI($username, $password, $mode , $privateKeyFile); 
+    $yoAPI->set_nonblocking("TRUE");
+
+
+	// $yoAPI->set_URL('https://sandbox.yo.co.ug/services/yopaymentsdev/task.php');
+
+	$yoAPI->set_external_reference(date("YmdHis").rand(1,100));
+	$yoAPI->set_private_key_file_location(config('yo_payments.private_key_file'));
+
+	$yoAPI->set_public_key_authentication_nonce(date("YmdHis").rand(1,100));
+	$yoAPI->generate_public_key_authentication_signature($msisdn, $amount, $narrative);
+	$response = $yoAPI->ac_withdraw_funds($msisdn, $amount, $narrative);
+
+	if($response['Status']=='OK'){
+	if($response['TransactionStatus']=='SUCCEEDED'){
+		echo "Payment made! Funds have been deposited onto your account. Transaction Reference = ".$response['TransactionReference'].". Thank you for using Yo! Payments";
+
+		// Save this transaction for future reference
+	}else{
+		echo "Yo Payments Error: ".$response['StatusMessage'];
+	}
+}
+
+
+
 
     // Construct Yo! Payments XML
-    $xml = ""; // Construct the XML structure
+    // $xml = ""; // Construct the XML structure
 
-    // Make acwithdrawfunds API call to Yo! Payments
-    $response = Http::withHeaders([
-        'Authorization' => 'Bearer YOUR_YO_PAYMENTS_API_KEY',
-        'Content-Type' => 'application/xml',
-    ])->post('https://paymentsapi1.yo.co.ug/ybs/task.php', $xml);
+    // // Make acwithdrawfunds API call to Yo! Payments
+    // $response = Http::withHeaders([
+    //     'Authorization' => 'Bearer YOUR_YO_PAYMENTS_API_KEY',
+    //     'Content-Type' => 'application/xml',
+    // ])->post('https://paymentsapi1.yo.co.ug/ybs/task.php', $xml);
 
     // Parse the results and update transaction
     // Update status, payment_gateway_reference, etc.
 
     // Return success message
-    return redirect()->route('customers.view_balance')->with('success', 'Withdrawal successful.');
+    // return redirect()->route('customers.view_balance')->with('success', 'Withdrawal successful.');
 }
 
 

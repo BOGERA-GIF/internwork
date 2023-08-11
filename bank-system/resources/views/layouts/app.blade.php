@@ -6,15 +6,15 @@
     <title>Mini-Core Banking System</title>
     <!-- Add your CSS files here -->
     <!-- <link rel="stylesheet" href="{{ asset('css/styles.css') }}"> -->
-
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
     <!-- Add EasyUI CSS -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    
+    <!-- <link rel="stylesheet" href="{{ asset('resources/css/styles.css') }}"> -->
 
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
     <style>
-        .custom-panel {
+        .custom-panel { 
             width: 100%; height:800; /* Set your desired width here */
         }
         header {
@@ -35,28 +35,30 @@
             padding: 8px;
             text-decoration: none;
             margin: 0px;
-            border: 1px solid #EEEEEE;
+            /* border: 1px solid #4EB2E0; */
+            
         }
-    </style>
+     </style> 
 </head>
 <body>
     <header>
-        <div class="container" style='width: 100%;' , 'height:800'>
+    <div class="container" style='width: 100%;' , 'height:800' >
             <h1>Mini-Core Banking System</h1>
-            <nav class="nav">
+            <nav class="nav" >
                 <ul>
-                    <li><a href="{{ route('home') }}">Home</a></li>
-                    <li><a href="{{ route('users.index') }}">Users</a></li>
-                    <li><a href="{{ route('customers.index') }}">Customers</a></li>
-                    <li><a href="{{ route('customers.login') }}">Customer Login</a></li>
-                    <li><a href="{{ route('customers.view_balance') }}">View Balance</a></li>
+                    <li><a href="{{ route('home') }}"    class="bg-blue-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Home</a></li>
+                    <li><a href="{{ route('users.index') }}"   class="bg-blue-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Users</a></li>
+                    <li><a href="{{ route('customers.index') }}"   class="bg-blue-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><button type="submit">Customers</button></a></li>
+                    <!-- <li><a href="{{ route('customers.login') }}"   class="bg-blue-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Customer Login</a></li> -->
+                    <li><a href="{{ route('customers.view_balance') }}"   class="bg-blue-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">View Balance</a></li>
                 </ul>
             </nav>
         </div>
+
     </header>
 
     <main>
-        <div class="easyui-layout" data-options="fit:false" style="width: 100%; height: 400px;">
+        <div  class="easyui-layout" data-options="fit:false" style="width: 100%; height: 400px;">
             <div data-options="region:'west',split:true" title="Menu" style="width: 200px;">
                 <ul class="easyui-tree">
                     <li data-options="state:'closed'">
@@ -84,7 +86,7 @@
     </main>
 
     <footer>
-        <div class="container">
+        <div class="bg-00b4d8"class="container">
             <p>&copy; <?php echo date("Y"); ?> Mini-Core Banking System. All rights reserved.</p>
         </div>
     </footer>

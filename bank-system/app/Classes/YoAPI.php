@@ -2,6 +2,7 @@
 namespace App\Classes;
 //use App\Classes\SimpleXMLElement; 
 use \SimpleXMLElement;
+use \Exception;
 
 class YoAPI {
 
@@ -486,7 +487,8 @@ class YoAPI {
     */
     public function set_private_key_file_location($private_key_file_location)
     {
-        $this->private_key_file_location = $private_key_file_location;
+        $this->private_key_file_location = config('yo_payments.private_key_file');
+        // $private_key_file_location = config('yo_payments.private_key_file');
     }
 
     /**
@@ -988,7 +990,7 @@ class YoAPI {
     * @param string $narrative the reason for withdrawal of funds from your account 
     * @return array
     */
-    public function ac_withdraw_funds($msisdn, $amount, $narrative)
+    public function ac_withdraw_funds($msisdn, $amount, $narrative, $privateKeyFile)
     {
         $xml = '';
         $xml .= '<?xml version="1.0" encoding="UTF-8"?>';
@@ -1187,6 +1189,7 @@ class YoAPI {
         }
 
         if($this->private_key_file_location==NULL){
+            // dd(response)
             throw new Exception('Private key file location cannot be NULL');
         }
         
