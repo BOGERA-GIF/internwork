@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerDepositController;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\AuthenticatesCustomers;
 use App\Http\Controllers\DepositController;
+
 // use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -147,3 +148,7 @@ Route::middleware(['auth:customers'])->group(function () {
         ->name('customers.account_statement');
     // Add other authenticated routes here
 });
+
+
+Route::get('/check-status', [CustomerController::class,  'showCheckStatus'])->name('customers.check_status');
+

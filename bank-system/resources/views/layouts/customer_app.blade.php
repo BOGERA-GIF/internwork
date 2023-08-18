@@ -25,7 +25,7 @@
 <body class="bg-gray-100">
     <nav class="bg-blue-600 p-4 text-white">
         <div class="container mx-auto flex justify-between">
-            <a href="{{ route('customers.dashboard') }}" class="font-semibold text-lg">BankHub</a>
+            <!-- <a href="{{ route('customers.dashboard') }}" class="font-semibold text-lg">BankHub</a> -->
             <ul class="flex space-x-4">
                 <!-- <li><a href="{{ route('customers.dashboard') }}">Dashboard</a></li> -->
                 <!-- <li><a href="{{ route('customers.view_balance') }}">View Balance</a></li> -->
