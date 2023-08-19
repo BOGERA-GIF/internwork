@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
 // ... your existing JavaScript code ...
 
@@ -67,10 +66,35 @@ depositButton.addEventListener("click", function() {
     depositButton.disabled = true;
 
     // Make the actual API call to Yo Payments
-    makeYoPaymentsAPICall();
-});
-</script>
+   // makeYoPaymentsAPICall();
+//});
+function makeYoPaymentsAPICall() {
+            var apiUrl = "{{ route('customers.process_deposit') }}"; // Use the route for the API endpoint
+            var requestData = new FormData(depositForm); // Gather form data
 
+            axios.post(apiUrl, requestData)
+                .then(function(response) {
+                    loadingBar.style.display = "none";
+                    submitButton.disabled = false;
+
+                    if (response.data.success) {
+                        alert("Transaction successful!");
+                    } else {
+                        timeoutNotification.style.display = "block";
+                        alert("Transaction failed. Please try again.");
+                    }
+                })
+                .catch(function(error) {
+                    loadingBar.style.display = "none";
+                    submitButton.disabled = false;
+
+                    console.error("API Error:", error);
+                    alert("Transaction failed. Please try again.");
+                });
+        }
+    });
+</script>
+<script>
 public function ac_transaction_check_status($transaction_reference, $private_transaction_reference=NULL)
     {
         $xml = '';

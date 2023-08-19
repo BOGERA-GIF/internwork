@@ -27,7 +27,7 @@ class Customer extends Authenticatable implements AuthenticatableContract
         'contact_person_phone',
         'business_phone',
         'business_email',
-        'PIN',
+        'pin',
         'available_balance',
         'actual_balance',
         // Add other fillable attributes here
@@ -47,5 +47,10 @@ class Customer extends Authenticatable implements AuthenticatableContract
     public function getAuthPassword()
     {
         return $this->pin;
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(CustomerTransaction::class);
     }
 }

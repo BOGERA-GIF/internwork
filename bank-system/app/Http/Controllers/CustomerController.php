@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 // use App\controllers\yoPayments\YoAPI.php;
+
 use App\Models\TransactionsLog;
 use App\Models\Customer;
 use Illuminate\Http\Request;
@@ -372,55 +373,98 @@ public function viewBalance()
         }
     }
 
-    // Retrieve the customer based on the user's account_number
-    //$customer = Customer::where('account_number', $user->account_number)->first();
-
-    //return view('deposit', ['customer' => $customer]);
-//}
-    // return view('customers.depositForm');
-    // }
-
-     public function processDeposit(Request $request)
-     {
-    // Validation
-    $request->validate([
-        'amount' => 'required|numeric|min:0',
-        'narrative' => 'required',
-    ]);
-
-    // Process deposit and update balances
-    $customer = Auth::guard('customers')->user();
-    $depositAmount = $request->input('amount');
-
-    $username= config("services.yopayments.api_username");
-    $password= config("services.yopayments.api_password");
-    $mode= config("services.yopayments.mode");
-
-    $mode = "sandbox";//For production, set this to production
-    $yoAPI = new YoAPI($username, $password, $mode);
-    $yoAPI->set_nonblocking("TRUE");
+    
 
 
-    $transaction_reference = date("YmdHis").rand();
-    $yoAPI->set_external_reference($transaction_reference);
+//      public function processDeposit(Request $request)
+//      {
+//     // Validation
+//     try {
+//     $request->validate([
+//         'amount' => 'required|numeric|min:0',
+//         'narrative' => 'required',
+//     ]);
 
-    $response = $yoAPI->ac_deposit_funds('256770000000', 10000, 'Reason for transfer of funds');
-    if($response['Status']=='OK'){
+//     // Process deposit and update balances
+//     $customer = Auth::guard('customers')->user();
+//     $depositAmount = $request->input('amount');
 
-         dd($response);
-        // Transaction was successful and funds were deposited onto your account
-        echo "Transaction Reference = ".$response['TransactionReference'];
-    }
-}
+//     $username= config("services.yopayments.api_username");
+//     $password= config("services.yopayments.api_password");
+//     $mode= config("services.yopayments.mode");
+
+//     $mode = "sandbox";//For production, set this to production
+//     $yoAPI = new YoAPI($username, $password, $mode);
+//     $yoAPI->set_nonblocking("TRUE");
+
+
+//     $transaction_reference = date("YmdHis").rand();
+//     $yoAPI->set_external_reference($transaction_reference);
+
+//     $response = $yoAPI->ac_deposit_funds('256770000000', 10000, 'Reason for transfer of funds');
+//     if($response['Status']=='OK'){
+
+//         return response()->json(['success' => true]);
+//     } catch (\Exception $e) {
+//         // Handle any exceptions that occur during the deposit process
+//         return response()->json(['success' => false, 'error' => $e->getMessage()]);
+
+//         //  dd($response);
+//         // Transaction was successful and funds were deposited onto your account
+//         //echo "Transaction Reference = ".$response['TransactionReference'];
+//     }
+// }
     // Update balances and log transaction
+    
+    public function processDeposit(Request $request)
+    {
+        try {
+            // Validation
+            $request->validate([
+                'amount' => 'required|numeric|min:0',
+                'narrative' => 'required',
+            ]);
+    
+            // Process deposit and update balances
+            $customer = Auth::guard('customers')->user();
+            $depositAmount = $request->input('amount');
+    
+            $username = config("services.yopayments.api_username");
+            $password = config("services.yopayments.api_password");
+            $mode = config("services.yopayments.mode");
+    
+            $yoAPI = new YoAPI($username, $password, $mode);
+            $yoAPI->set_nonblocking("TRUE");
+    
+            $transaction_reference = date("YmdHis") . rand();
+            $yoAPI->set_external_reference($transaction_reference);
+    
+            $response = $yoAPI->ac_deposit_funds('256770000000', 10000, 'Reason for transfer of funds');
+    
+            if ($response['Status'] == 'OK') {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false, 'error' => 'Transaction failed']);
+            }
+        } catch (\Exception $e) {
+            // Handle any exceptions that occur during the deposit process
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+        }
+    }
+    
     
     
     
     // Construct Yo! Payments XML
     public function showCheckStatus()
     {
-    return view('customers.check_status');
-    }  
+        $customer = Auth::guard('customers')->user();
+        $withdrawals = $customer->transactions()->where('type', 'withdrawal')->get();
+    
+        return view('customers.check_status', compact('withdrawals'));
+    }
+    // return view('customers.check_status');
+   // }  
 
 
 
